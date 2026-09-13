@@ -17,8 +17,9 @@ Per completare l’integrazione reale:
 1. crea e configura l’account Google AdSense per il banner;
 2. crea in Google Ad Manager un’unità pubblicitaria di tipo rewarded;
 3. inserisci gli ID e gli snippet Google in `index.html`;
-4. sostituisci il link informativo con la Privacy Policy del progetto;
-5. verifica il comportamento del consenso prima di pubblicare annunci personalizzati.
+4. completa i dati del titolare e il contatto in `privacy-policy.html`;
+5. aggiorna la policy con i fornitori effettivamente utilizzati;
+6. verifica il comportamento del consenso prima di pubblicare annunci personalizzati.
 
 Gli annunci Google non sono ancora attivi finché non vengono inseriti il publisher ID AdSense e il percorso dell’unità pubblicitaria Ad Manager.
 
