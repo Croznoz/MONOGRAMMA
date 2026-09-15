@@ -2,17 +2,11 @@
   "cleanUrls": true,
   "trailingSlash": false,
   "redirects": [
-    { "source": "/", "destination": "/presentazione.html", "permanent": false }
+    { "source": "/", "destination": "/presentazione", "permanent": false }
   ],
   "headers": [
     {
-      "source": "/(.*\\.(svg|png|jpg|webp|ico))",
-      "headers": [
-        { "key": "Cache-Control", "value": "public, max-age=31536000, immutable" }
-      ]
-    },
-    {
-      "source": "/presentazione.html",
+      "source": "/presentazione",
       "headers": [
         { "key": "Cache-Control", "value": "public, max-age=3600, must-revalidate" }
       ]
