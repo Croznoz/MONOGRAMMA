@@ -371,6 +371,39 @@
             border-radius: 3px;
         }
 
+        .letter-picker {
+            display: flex;
+            justify-content: center;
+            gap: 5px;
+            flex-wrap: wrap;
+            min-height: 30px;
+        }
+
+        .scale-controls .letter-picker button {
+            width: 30px;
+            height: 30px;
+            padding: 0;
+            border: 1px solid #ddd;
+            border-radius: 3px;
+            background: transparent;
+            color: #666;
+            font: 500 11px/1 'Inter', sans-serif;
+            cursor: pointer;
+            transition: background-color .2s ease, color .2s ease, border-color .2s ease;
+        }
+
+        .scale-controls .letter-picker button:hover,
+        .scale-controls .letter-picker button:focus-visible {
+            border-color: #999;
+            outline: none;
+        }
+
+        .scale-controls .letter-picker button.active {
+            background: #1a1a1a;
+            border-color: #1a1a1a;
+            color: #fff;
+        }
+
         .stroke-slider-wrap {
             display: flex;
             justify-content: center;
@@ -656,6 +689,7 @@
 
         <div class="scale-controls" aria-label="Ridimensiona lettere" style="display:flex; flex-direction:column; gap:8px; margin-bottom:20px;">
             <div style="font-size:8px; letter-spacing:2.5px; text-transform:uppercase; color:#999; text-align:center;">Selezione e ridimensiona lettera</div>
+            <div id="letterPicker" class="letter-picker" aria-label="Seleziona una lettera"></div>
             <div style="display:flex; justify-content:center; align-items:center; gap:8px; flex-wrap:wrap;">
                 <label for="letterIndexInput">Lettera</label>
                 <input id="letterIndexInput" type="number" min="1" max="8" step="1" value="1" inputmode="numeric">
@@ -664,7 +698,7 @@
                 <button id="btnScaleUp" type="button" aria-label="Ingrandisci lettera">+</button>
             </div>
             <div class="stroke-slider-wrap">
-                <label for="strokeThickness">Spessore tratto</label>
+                <label for="strokeThickness">Spessore tratto lettera</label>
                 <input id="strokeThickness" type="range" min="0.5" max="10" step="0.5" value="1">
                 <output id="strokeThicknessValue" for="strokeThickness">1</output>
             </div>
@@ -949,8 +983,8 @@
         let gridOn = true;
         let frameOn = true;
         let letterScales = {};
+        let letterStrokeThicknesses = {};
         let selectedLetterIndex = 0;
-        let strokeThickness = 1;
 
         function clamp(value, min, max) {
             return Math.min(Math.max(value, min), max);
@@ -970,6 +1004,26 @@
             indexInput.value = String(safeIndex + 1);
             const scaleValue = letterScales[safeIndex] ?? 1;
             scaleInput.value = Number(scaleValue).toFixed(2);
+            syncStrokeControl();
+            renderLetterPicker();
+        }
+
+        function syncStrokeControl() {
+            const slider = document.getElementById('strokeThickness');
+            const output = document.getElementById('strokeThicknessValue');
+            const thickness = letterStrokeThicknesses[selectedLetterIndex] ?? 1;
+            slider.value = String(thickness);
+            output.textContent = String(thickness);
+        }
+
+        function renderLetterPicker() {
+            const picker = document.getElementById('letterPicker');
+            const letters = document.getElementById('letterInput').value.toUpperCase().replace(/[^A-Z]/g, '');
+            const selectionLabel = currentLanguage === 'en' ? 'Select letter' : 'Seleziona lettera';
+            picker.innerHTML = Array.from(letters, function (letter, index) {
+                const isSelected = index === selectedLetterIndex;
+                return `<button type="button" class="${isSelected ? 'active' : ''}" data-letter-index="${index}" aria-label="${selectionLabel} ${index + 1}: ${letter}" aria-pressed="${isSelected}">${letter}</button>`;
+            }).join('');
         }
 
 
@@ -1014,12 +1068,13 @@
             }
 
             // Letters strictly fit the selected canon
-            const ls = `fill:none;stroke:#1a1a1a;stroke-width:${strokeThickness};stroke-linecap:butt;stroke-linejoin:miter`;
             for (let i = 0; i < text.length; i++) {
                 const ch = text[i];
                 if (LETTERS[ch]) {
                     const scale = clamp(letterScales[i] ?? 1, 0.6, 1.2);
                     const transform = `translate(50 50) scale(${scale}) translate(-50 -50)`;
+                    const thickness = clamp(letterStrokeThicknesses[i] ?? 1, 0.5, 10);
+                    const ls = `fill:none;stroke:#1a1a1a;stroke-width:${thickness};stroke-linecap:butt;stroke-linejoin:miter`;
                     html += `<g transform="${transform}" style="${ls}" class="letter-group">${LETTERS[ch]}</g>`;
                 }
             }
@@ -1047,7 +1102,8 @@
             { selector: '#btnScaleDown', attribute: 'aria-label', it: 'Riduci lettera', en: 'Reduce letter size' },
             { selector: '#letterScaleInput', attribute: 'aria-label', it: 'Ridimensiona lettera', en: 'Resize letter' },
             { selector: '#btnScaleUp', attribute: 'aria-label', it: 'Ingrandisci lettera', en: 'Enlarge letter' },
-            { selector: 'label[for="strokeThickness"]', it: 'Spessore tratto', en: 'Stroke weight' },
+            { selector: '#letterPicker', attribute: 'aria-label', it: 'Seleziona una lettera', en: 'Select a letter' },
+            { selector: 'label[for="strokeThickness"]', it: 'Spessore tratto lettera', en: 'Letter stroke weight' },
             { selector: '#btnExportSvg', it: 'Esporta SVG', en: 'Export SVG' },
             { selector: '#btnExportPng', it: 'Esporta PNG', en: 'Export PNG' },
             { selector: '#rewardDialog h2', it: 'Sblocca il download', en: 'Unlock download' },
@@ -1090,6 +1146,7 @@
                 link.href = pageUrl.href;
             });
             try { localStorage.setItem('monogramma-language', currentLanguage); } catch (error) { }
+            renderLetterPicker();
         }
 
         document.querySelectorAll('[data-language]').forEach(function (button) {
@@ -1292,8 +1349,15 @@
 
             const next = enteredValue - 1;
             selectedLetterIndex = next;
-            const scaleValue = letterScales[selectedLetterIndex] ?? 1;
-            document.getElementById('letterScaleInput').value = Number(scaleValue).toFixed(2);
+            syncScaleControls();
+            render();
+        });
+
+        document.getElementById('letterPicker').addEventListener('click', function (event) {
+            const button = event.target.closest('button[data-letter-index]');
+            if (!button) return;
+            selectedLetterIndex = Number(button.dataset.letterIndex);
+            syncScaleControls();
             render();
         });
 
@@ -1335,8 +1399,11 @@
         });
 
         document.getElementById('strokeThickness').addEventListener('input', function () {
-            strokeThickness = Number(this.value);
-            document.getElementById('strokeThicknessValue').textContent = String(strokeThickness);
+            const total = getCurrentLetterCount();
+            if (total === 0) return;
+            const thickness = clamp(Number(this.value), 0.5, 10);
+            letterStrokeThicknesses[selectedLetterIndex] = thickness;
+            document.getElementById('strokeThicknessValue').textContent = String(thickness);
             render();
         });
 
@@ -1462,7 +1529,6 @@
         let savedLanguage = new URLSearchParams(window.location.search).get('lang');
         try { if (!savedLanguage) savedLanguage = localStorage.getItem('monogramma-language') || 'it'; } catch (error) { }
           applyEditorLanguage(savedLanguage);
-        syncScaleControls();
         syncScaleControls();
         render();
         renderAlphabetGrid();
