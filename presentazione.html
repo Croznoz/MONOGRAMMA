@@ -975,10 +975,10 @@
             var languageUrl = new URL(window.location.href);
             languageUrl.searchParams.set('lang', language);
             window.history.replaceState({}, '', languageUrl);
-            document.querySelectorAll('a[href*="generatore.html"]').forEach(function (link) {
-                var generatorUrl = new URL(link.href, window.location.href);
-                generatorUrl.searchParams.set('lang', language);
-                link.href = generatorUrl.href;
+            document.querySelectorAll('a[href*="generatore.html"], a[href*="privacy-policy.html"], a[href*="presentazione.html"]').forEach(function (link) {
+                var pageUrl = new URL(link.href, window.location.href);
+                pageUrl.searchParams.set('lang', language);
+                link.href = pageUrl.href;
             });
             try { localStorage.setItem('monogramma-language', language); } catch (error) { }
         }

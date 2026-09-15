@@ -1084,6 +1084,11 @@
             var languageUrl = new URL(window.location.href);
             languageUrl.searchParams.set('lang', currentLanguage);
             window.history.replaceState({}, '', languageUrl);
+            document.querySelectorAll('a[href*="privacy-policy.html"], a[href*="presentazione.html"]').forEach(function (link) {
+                var pageUrl = new URL(link.href, window.location.href);
+                pageUrl.searchParams.set('lang', currentLanguage);
+                link.href = pageUrl.href;
+            });
             try { localStorage.setItem('monogramma-language', currentLanguage); } catch (error) { }
         }
 

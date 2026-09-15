@@ -3,13 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="refresh" content="0;url=presentazione.html">
     <title>Monogramma</title>
 </head>
 <body>
-    <p>Reindirizzamento a <a href="presentazione.html">Monogramma</a>...</p>
+    <p>Reindirizzamento a <a id="presentation-link" href="presentazione.html">Monogramma</a>...</p>
     <script>
-        window.location.replace('presentazione.html');
+        // Preserve an explicitly selected language when entering from the root URL.
+        var destination = 'presentazione.html' + window.location.search + window.location.hash;
+        document.getElementById('presentation-link').href = destination;
+        window.location.replace(destination);
     </script>
 </body>
 </html>

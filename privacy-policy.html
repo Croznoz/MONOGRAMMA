@@ -39,63 +39,141 @@
             background: #f7f6f4;
             font-size: 14px;
         }
+        .topbar {
+            width: min(760px, 100%);
+            margin: 0 auto 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font: 11px Arial, Helvetica, sans-serif;
+            letter-spacing: 1.5px;
+            text-transform: uppercase;
+        }
+        .home-link { text-decoration: none; }
+        .language-switch { display: inline-flex; gap: 6px; align-items: center; }
+        .language-switch button {
+            border: 0;
+            padding: 3px 0;
+            background: transparent;
+            color: #888;
+            font: inherit;
+            letter-spacing: inherit;
+            cursor: pointer;
+        }
+        .language-switch button[aria-pressed="true"], .language-switch button:hover { color: #1a1a1a; }
+        .language-switch button + button::before { content: "/"; color: #bbb; margin-right: 6px; }
     </style>
 </head>
 <body>
+    <nav class="topbar" aria-label="Navigazione privacy">
+        <a class="home-link" href="presentazione.html">← <span data-i18n="back">Torna a Monogramma</span></a>
+        <div class="language-switch" role="group" aria-label="Seleziona la lingua">
+            <button type="button" data-language="it" aria-pressed="true">IT</button>
+            <button type="button" data-language="en" aria-pressed="false">EN</button>
+        </div>
+    </nav>
     <main>
         <h1>Privacy Policy</h1>
-        <p class="updated">Ultimo aggiornamento: 13 settembre 2026</p>
+        <p class="updated" data-i18n="updated">Ultimo aggiornamento: 13 settembre 2026</p>
 
-        <div class="notice">
+        <div class="notice" data-i18n="notice">
             Questa informativa descrive il funzionamento attuale di Monogramma. Prima di attivare servizi pubblicitari di terze parti, completa i dati del titolare e aggiorna questa pagina con i fornitori effettivamente utilizzati.
         </div>
 
-        <h2>1. Titolare del trattamento</h2>
-        <p>
+        <h2 data-i18n="owner-title">1. Titolare del trattamento</h2>
+        <p data-i18n="owner-text">
             Il titolare del trattamento è Croz Design / Croznoz.
             Per richieste relative alla privacy: <strong>[inserire indirizzo email del titolare]</strong>.
         </p>
 
-        <h2>2. Che cos'è Monogramma</h2>
-        <p>
+        <h2 data-i18n="about-title">2. Che cos'è Monogramma</h2>
+        <p data-i18n="about-text">
             Monogramma è uno strumento web client-side per creare monogrammi geometrici ed esportarli in formato SVG o PNG. Il progetto non richiede un account e non utilizza un database proprio.
         </p>
 
-        <h2>3. Dati trattati</h2>
-        <p>
+        <h2 data-i18n="data-title">3. Dati trattati</h2>
+        <p data-i18n="data-text-1">
             Le lettere inserite e le impostazioni usate per creare il monogramma vengono elaborate nel browser dell'utente. Il sito non le invia a un server proprio.
         </p>
-        <p>
+        <p data-i18n="data-text-2">
             Se l'utente esprime una preferenza pubblicitaria, la scelta viene salvata nel local storage del browser con la chiave <code>monogramma-ad-consent</code>. Il valore può essere <code>personalized</code> oppure <code>non-personalized</code>.
         </p>
-        <p>
+        <p data-i18n="data-text-3">
             Il caricamento del font utilizzato dall'interfaccia può comportare richieste ai servizi Google Fonts, secondo le condizioni e le informative di Google.
         </p>
 
-        <h2>4. Pubblicità e consenso</h2>
-        <p>
+        <h2 data-i18n="ads-title">4. Pubblicità e consenso</h2>
+        <p data-i18n="ads-text-1">
             Il banner privacy consente di scegliere tra annunci personalizzati e non personalizzati. La preferenza viene memorizzata localmente e non costituisce, da sola, una comunicazione a fornitori pubblicitari.
         </p>
-        <p>
+        <p data-i18n="ads-text-2">
             Al momento della pubblicazione di questa informativa, gli annunci Google non sono attivi. Prima di attivarli saranno aggiunti i relativi fornitori, finalità, tecnologie di tracciamento, tempi di conservazione e modalità di revoca del consenso.
         </p>
 
-        <h2>5. Base giuridica e facoltatività</h2>
-        <p>
+        <h2 data-i18n="legal-title">5. Base giuridica e facoltatività</h2>
+        <p data-i18n="legal-text">
             Il consenso agli annunci personalizzati è facoltativo. Il rifiuto o la scelta di annunci non personalizzati non impedisce l'uso delle funzioni principali del generatore, salvo eventuali meccanismi pubblicitari che verranno indicati chiaramente prima della loro attivazione.
         </p>
 
-        <h2>6. Diritti dell'utente</h2>
-        <p>
+        <h2 data-i18n="rights-title">6. Diritti dell'utente</h2>
+        <p data-i18n="rights-text">
             Nei casi previsti dalla normativa applicabile, l'utente può chiedere accesso, rettifica, cancellazione, limitazione del trattamento, opposizione o portabilità dei dati, oltre a revocare il consenso. Per esercitare i diritti, utilizzare il contatto indicato nella sezione 1.
         </p>
 
-        <h2>7. Modifiche</h2>
-        <p>
+        <h2 data-i18n="changes-title">7. Modifiche</h2>
+        <p data-i18n="changes-text">
             Questa informativa può essere aggiornata quando cambiano il funzionamento del sito o i servizi utilizzati. La versione aggiornata sarà pubblicata su questa pagina con la relativa data.
         </p>
 
-        <p><a href="presentazione.html">Torna a Monogramma</a></p>
+        <p><a class="bottom-home-link" href="presentazione.html" data-i18n="back">Torna a Monogramma</a></p>
     </main>
+    <script>
+    (function () {
+        var translations = {
+            it: {
+                back: 'Torna a Monogramma', updated: 'Ultimo aggiornamento: 13 settembre 2026',
+                notice: 'Questa informativa descrive il funzionamento attuale di Monogramma. Prima di attivare servizi pubblicitari di terze parti, completa i dati del titolare e aggiorna questa pagina con i fornitori effettivamente utilizzati.',
+                'owner-title': '1. Titolare del trattamento', 'owner-text': 'Il titolare del trattamento è Croz Design / Croznoz. Per richieste relative alla privacy: <strong>[inserire indirizzo email del titolare]</strong>.',
+                'about-title': "2. Che cos'è Monogramma", 'about-text': 'Monogramma è uno strumento web client-side per creare monogrammi geometrici ed esportarli in formato SVG o PNG. Il progetto non richiede un account e non utilizza un database proprio.',
+                'data-title': '3. Dati trattati', 'data-text-1': 'Le lettere inserite e le impostazioni usate per creare il monogramma vengono elaborate nel browser dell’utente. Il sito non le invia a un server proprio.', 'data-text-2': 'Se l’utente esprime una preferenza pubblicitaria, la scelta viene salvata nel local storage del browser con la chiave <code>monogramma-ad-consent</code>. Il valore può essere <code>personalized</code> oppure <code>non-personalized</code>.', 'data-text-3': 'Il caricamento del font utilizzato dall’interfaccia può comportare richieste ai servizi Google Fonts, secondo le condizioni e le informative di Google.',
+                'ads-title': '4. Pubblicità e consenso', 'ads-text-1': 'Il banner privacy consente di scegliere tra annunci personalizzati e non personalizzati. La preferenza viene memorizzata localmente e non costituisce, da sola, una comunicazione a fornitori pubblicitari.', 'ads-text-2': 'Al momento della pubblicazione di questa informativa, gli annunci Google non sono attivi. Prima di attivarli saranno aggiunti i relativi fornitori, finalità, tecnologie di tracciamento, tempi di conservazione e modalità di revoca del consenso.',
+                'legal-title': '5. Base giuridica e facoltatività', 'legal-text': 'Il consenso agli annunci personalizzati è facoltativo. Il rifiuto o la scelta di annunci non personalizzati non impedisce l’uso delle funzioni principali del generatore, salvo eventuali meccanismi pubblicitari che verranno indicati chiaramente prima della loro attivazione.',
+                'rights-title': '6. Diritti dell’utente', 'rights-text': 'Nei casi previsti dalla normativa applicabile, l’utente può chiedere accesso, rettifica, cancellazione, limitazione del trattamento, opposizione o portabilità dei dati, oltre a revocare il consenso. Per esercitare i diritti, utilizzare il contatto indicato nella sezione 1.',
+                'changes-title': '7. Modifiche', 'changes-text': 'Questa informativa può essere aggiornata quando cambiano il funzionamento del sito o i servizi utilizzati. La versione aggiornata sarà pubblicata su questa pagina con la relativa data.'
+            },
+            en: {
+                back: 'Back to Monogramma', updated: 'Last updated: 13 September 2026',
+                notice: 'This notice describes how Monogramma currently works. Before enabling third-party advertising services, complete the controller details and update this page with the providers actually used.',
+                'owner-title': '1. Data controller', 'owner-text': 'The data controller is Croz Design / Croznoz. For privacy-related requests: <strong>[insert the controller’s email address]</strong>.',
+                'about-title': '2. What Monogramma is', 'about-text': 'Monogramma is a client-side web tool for creating geometric monograms and exporting them as SVG or PNG. The project does not require an account and does not use its own database.',
+                'data-title': '3. Data processed', 'data-text-1': 'The letters entered and the settings used to create a monogram are processed in the user’s browser. The website does not send them to its own server.', 'data-text-2': 'If the user expresses an advertising preference, it is stored in the browser’s local storage under the <code>monogramma-ad-consent</code> key. The value can be <code>personalized</code> or <code>non-personalized</code>.', 'data-text-3': 'Loading the interface font may involve requests to Google Fonts services, according to Google’s terms and privacy notices.',
+                'ads-title': '4. Advertising and consent', 'ads-text-1': 'The privacy banner lets users choose between personalized and non-personalized advertising. The preference is stored locally and does not, on its own, constitute a disclosure to advertising providers.', 'ads-text-2': 'At the time this notice is published, Google ads are not active. Before they are enabled, the relevant providers, purposes, tracking technologies, retention periods and consent withdrawal options will be added.',
+                'legal-title': '5. Legal basis and optionality', 'legal-text': 'Consent to personalized advertising is optional. Refusal or choosing non-personalized ads does not prevent use of the generator’s main functions, subject to any advertising mechanisms that will be clearly indicated before activation.',
+                'rights-title': '6. User rights', 'rights-text': 'Where provided by applicable law, users may request access, rectification, erasure, restriction of processing, objection or portability, as well as withdraw consent. To exercise these rights, use the contact listed in section 1.',
+                'changes-title': '7. Changes', 'changes-text': 'This notice may be updated when the website’s operation or the services used change. The updated version will be published on this page with its relevant date.'
+            }
+        };
+        function applyLanguage(language) {
+            language = language === 'en' ? 'en' : 'it';
+            document.documentElement.lang = language;
+            document.querySelectorAll('[data-i18n]').forEach(function (element) {
+                element.innerHTML = translations[language][element.dataset.i18n];
+            });
+            document.querySelectorAll('[data-language]').forEach(function (button) {
+                button.setAttribute('aria-pressed', button.dataset.language === language ? 'true' : 'false');
+            });
+            document.querySelector('.language-switch').setAttribute('aria-label', language === 'en' ? 'Select language' : 'Seleziona la lingua');
+            document.querySelectorAll('a[href*="presentazione.html"]').forEach(function (link) {
+                var url = new URL(link.href, window.location.href); url.searchParams.set('lang', language); link.href = url.href;
+            });
+            var url = new URL(window.location.href); url.searchParams.set('lang', language); window.history.replaceState({}, '', url);
+            try { localStorage.setItem('monogramma-language', language); } catch (error) { }
+        }
+        document.querySelectorAll('[data-language]').forEach(function (button) { button.addEventListener('click', function () { applyLanguage(button.dataset.language); }); });
+        var language = new URLSearchParams(window.location.search).get('lang');
+        try { if (!language) language = localStorage.getItem('monogramma-language') || 'it'; } catch (error) { }
+        applyLanguage(language);
+    })();
+    </script>
 </body>
 </html>
