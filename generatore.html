@@ -527,6 +527,7 @@
             display: flex;
             justify-content: center;
             gap: 10px;
+            flex-wrap: wrap;
             margin-bottom: 68px;
         }
 
@@ -750,6 +751,7 @@
         <div class="actions">
             <button id="btnExportSvg">Esporta SVG</button>
             <button id="btnExportPng">Esporta PNG</button>
+            <button id="btnExportPdf">Esporta PDF</button>
         </div>
 
         <dialog class="reward-dialog" id="rewardDialog">
@@ -1162,6 +1164,7 @@
             { selector: 'label[for="strokeThickness"]', it: 'Spessore tratto lettera', en: 'Letter stroke weight' },
             { selector: '#btnExportSvg', it: 'Esporta SVG', en: 'Export SVG' },
             { selector: '#btnExportPng', it: 'Esporta PNG', en: 'Export PNG' },
+            { selector: '#btnExportPdf', it: 'Esporta PDF', en: 'Export PDF' },
             { selector: '#rewardDialog h2', it: 'Sblocca il download', en: 'Unlock download' },
             { selector: '#rewardDialog p', it: 'Guarda il video fino alla fine per scaricare il monogramma.', en: 'Watch the video to the end to download the monogram.' },
             { selector: '#rewardCancel', it: 'Annulla', en: 'Cancel' },
@@ -1318,6 +1321,92 @@
             };
 
             img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
+        }
+
+
+        /* ═══════════════════════════════════════════
+           EXPORT — PDF (square page, embedded high-res image)
+           ═══════════════════════════════════════════ */
+        function exportPDF() {
+            const svg = document.getElementById('monogram');
+            const size = 1600;
+            const canvas = document.createElement('canvas');
+            canvas.width = size;
+            canvas.height = size;
+            const ctx = canvas.getContext('2d');
+            const clone = svg.cloneNode(true);
+            clone.setAttribute('xmlns', 'http://www.w3.org/2000/svg');
+            clone.setAttribute('width', size);
+            clone.setAttribute('height', size);
+
+            const svgString = new XMLSerializer().serializeToString(clone);
+            const drawAndDownload = function (image) {
+                ctx.fillStyle = '#ffffff';
+                ctx.fillRect(0, 0, size, size);
+                ctx.drawImage(image, 0, 0, size, size);
+                const jpegBytes = dataUrlToBytes(canvas.toDataURL('image/jpeg', 0.95));
+                const pdf = createPdfFromJpeg(jpegBytes, size, size);
+                downloadBlob(new Blob([pdf], { type: 'application/pdf' }), getFilename('pdf'));
+            };
+
+            const img = new Image();
+            img.onload = function () { drawAndDownload(img); };
+            img.onerror = function () {
+                const fallback = new Image();
+                fallback.onload = function () { drawAndDownload(fallback); };
+                fallback.src = 'data:image/svg+xml;base64,' + btoa(unescape(encodeURIComponent(svgString)));
+            };
+            img.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svgString);
+        }
+
+        function dataUrlToBytes(dataUrl) {
+            const binary = atob(dataUrl.split(',')[1]);
+            const bytes = new Uint8Array(binary.length);
+            for (let i = 0; i < binary.length; i++) bytes[i] = binary.charCodeAt(i);
+            return bytes;
+        }
+
+        function createPdfFromJpeg(jpegBytes, width, height) {
+            const encoder = new TextEncoder();
+            const chunks = [];
+            const offsets = [];
+            let length = 0;
+            const addText = function (text) {
+                const bytes = encoder.encode(text);
+                chunks.push(bytes);
+                length += bytes.length;
+            };
+            const addBytes = function (bytes) {
+                chunks.push(bytes);
+                length += bytes.length;
+            };
+            const addObject = function (number, content) {
+                offsets[number] = length;
+                addText(number + ' 0 obj\n' + content + '\nendobj\n');
+            };
+
+            addText('%PDF-1.3\n%\xE2\xE3\xCF\xD3\n');
+            addObject(1, '<< /Type /Catalog /Pages 2 0 R >>');
+            addObject(2, '<< /Type /Pages /Kids [3 0 R] /Count 1 >>');
+            addObject(3, '<< /Type /Page /Parent 2 0 R /MediaBox [0 0 595 595] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>');
+            offsets[4] = length;
+            addText('4 0 obj\n<< /Type /XObject /Subtype /Image /Width ' + width + ' /Height ' + height + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + jpegBytes.length + ' >>\nstream\n');
+            addBytes(jpegBytes);
+            addText('\nendstream\nendobj\n');
+            const pageContent = 'q\n595 0 0 595 0 0 cm\n/Im0 Do\nQ\n';
+            addObject(5, '<< /Length ' + encoder.encode(pageContent).length + ' >>\nstream\n' + pageContent + 'endstream');
+            const xrefOffset = length;
+            addText('xref\n0 6\n0000000000 65535 f \n');
+            for (let i = 1; i <= 5; i++) addText(String(offsets[i]).padStart(10, '0') + ' 00000 n \n');
+            addText('trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n' + xrefOffset + '\n%%EOF');
+
+            const pdf = new Uint8Array(length);
+            let position = 0;
+            chunks.forEach(function (chunk) {
+                pdf.set(chunk, position);
+                position += chunk.length;
+            });
+            return pdf;
         }
 
 
@@ -1520,6 +1609,9 @@
         });
         document.getElementById('btnExportPng').addEventListener('click', function () {
             requestExport(exportPNG);
+        });
+        document.getElementById('btnExportPdf').addEventListener('click', function () {
+            requestExport(exportPDF);
         });
 
         document.getElementById('rewardVideo').addEventListener('ended', function () {
