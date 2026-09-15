@@ -16,7 +16,7 @@ Per completare l’integrazione reale:
 
 1. crea e configura l’account Google AdSense per il banner;
 2. crea in Google Ad Manager un’unità pubblicitaria di tipo rewarded;
-3. inserisci gli ID e gli snippet Google in `index.html`;
+3. inserisci gli ID e gli snippet Google in `generatore.html`;
 4. completa i dati del titolare e il contatto in `privacy-policy.html`;
 5. aggiorna la policy con i fornitori effettivamente utilizzati;
 6. verifica il comportamento del consenso prima di pubblicare annunci personalizzati.
@@ -29,7 +29,7 @@ Gli annunci Google non sono ancora attivi finché non vengono inseriti il publis
 2. Importa questa cartella come progetto.
 3. Usa la cartella radice del progetto come root.
 4. Vercel rileverà automaticamente un sito statico.
-5. La pagina iniziale è `presentazione.html`; l'editor del generatore resta disponibile in `index.html`.
+5. La pagina iniziale è `presentazione.html`; l'editor del generatore è disponibile in `generatore.html`.
 
 ## Nota
 
