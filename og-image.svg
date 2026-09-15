@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630" role="img" aria-label="Monogramma  Generatore vettoriale di monogrammi geometrici">
+  <rect width="1200" height="630" fill="#f7f6f4"/>
+  <g fill="none" stroke="#1a1a1a" stroke-linecap="square" transform="translate(524 191) scale(2)">
+    <rect x="12" y="12" width="104" height="104" stroke-width="1.25"/>
+    <circle cx="64" cy="64" r="52" stroke-width="1.25"/>
+    <circle cx="64" cy="64" r="26" stroke-width="1.25"/>
+    <path d="M64 12v104M12 64h104M12 12l52 52M116 12L64 64" stroke-width="1.25"/>
+  </g>
+  <circle cx="600" cy="320" r="5" fill="#1a1a1a"/>
+  <text x="600" y="420" text-anchor="middle" fill="#1a1a1a" font-family="system-ui, sans-serif" font-size="28" font-weight="300" letter-spacing="12">MONOGRAMMA</text>
+  <text x="600" y="468" text-anchor="middle" fill="#888" font-family="system-ui, sans-serif" font-size="14" font-weight="400" letter-spacing="4">GENERATORE VETTORIALE</text>
+  <text x="600" y="510" text-anchor="middle" fill="#aaa" font-family="system-ui, sans-serif" font-size="12" font-weight="400" letter-spacing="2">Monogrammi · Loghi · Stencil · SVG</text>
+</svg>

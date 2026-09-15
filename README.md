@@ -29,7 +29,7 @@ Gli annunci Google non sono ancora attivi finché non vengono inseriti il publis
 2. Importa questa cartella come progetto.
 3. Usa la cartella radice del progetto come root.
 4. Vercel rileverà automaticamente un sito statico.
-5. Il file principale è `index.html`.
+5. La pagina iniziale è `presentazione.html`; l'editor del generatore resta disponibile in `index.html`.
 
 ## Nota
 
