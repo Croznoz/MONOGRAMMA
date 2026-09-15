@@ -1112,10 +1112,12 @@
                 if (LETTERS[ch]) {
                     const scale = clamp(letterScales[i] ?? 1, 0.6, 1.2);
                     const flips = letterFlips[i] || {};
-                    const scaleX = scale * (flips.horizontal ? -1 : 1);
-                    const scaleY = scale * (flips.vertical ? -1 : 1);
-                    const transform = `translate(50 50) scale(${scaleX} ${scaleY}) translate(-50 -50)`;
                     const thickness = clamp(letterStrokeThicknesses[i] ?? 1, 0.5, 10);
+                    const canonScale = 47 / (47 + thickness * 0.75);
+                    const containedScale = Math.min(scale, canonScale);
+                    const scaleX = containedScale * (flips.horizontal ? -1 : 1);
+                    const scaleY = containedScale * (flips.vertical ? -1 : 1);
+                    const transform = `translate(50 50) scale(${scaleX} ${scaleY}) translate(-50 -50)`;
                     const ls = `fill:none;stroke:#1a1a1a;stroke-width:${thickness};stroke-linecap:butt;stroke-linejoin:miter`;
                     html += `<g transform="${transform}" style="${ls}" class="letter-group">${LETTERS[ch]}</g>`;
                 }
