@@ -1,36 +1,32 @@
 # Monogramma
 
-Tool statico per generare monogrammi geometrici in SVG e PNG, senza backend.
+Sito statico client-side per creare monogrammi geometrici ed esportarli in SVG o PNG. Non usa backend o database.
 
-## Pubblicità e download
+## Struttura
 
-La pagina include:
+- `presentazione.html`: pagina principale, contenuti, FAQ e cambio lingua.
+- `generatore.html`: editor del monogramma e download.
+- `privacy-policy.html`: informativa bilingue.
+- `logo.svg`, `og-image.svg`: identità visiva e anteprima social.
+- `alfabetocircolare.png`, `alfabetoquadrato.png`: riferimenti geometrici.
+- `index.html`: reindirizzamento alla presentazione.
+- `vercel.json`, `robots.txt`, `sitemap.xml`: pubblicazione e indicizzazione.
+- `ISTRUZIONI_MONOGRAMMA.md`: regole per modificare gli alfabeti.
 
-- un banner pubblicitario chiudibile dopo pochi secondi;
-- un banner privacy con scelta tra annunci personalizzati e non personalizzati;
-- un flusso video rewarded che abilita il download dopo la fine del video.
+## Sviluppo locale
 
-Il consenso viene salvato nel browser con `localStorage` e reso disponibile tramite `window.monogrammaAdConsent`.
+Non serve una build. Per provare il sito con un server locale:
 
-Per completare l’integrazione reale:
+```bash
+python3 -m http.server 8000
+```
 
-1. crea e configura l’account Google AdSense per il banner;
-2. crea in Google Ad Manager un’unità pubblicitaria di tipo rewarded;
-3. inserisci gli ID e gli snippet Google in `generatore.html`;
-4. completa i dati del titolare e il contatto in `privacy-policy.html`;
-5. aggiorna la policy con i fornitori effettivamente utilizzati;
-6. verifica il comportamento del consenso prima di pubblicare annunci personalizzati.
+Apri `http://localhost:8000/` nel browser.
 
-Gli annunci Google non sono ancora attivi finché non vengono inseriti il publisher ID AdSense e il percorso dell’unità pubblicitaria Ad Manager.
+## Vercel
 
-## Come pubblicare su Vercel
+Il progetto viene pubblicato dalla cartella radice come sito statico. `vercel.json` abilita URL puliti e reindirizza `/` alla presentazione; le pagine principali sono `/presentazione`, `/generatore` e `/privacy-policy`.
 
-1. Apri Vercel.
-2. Importa questa cartella come progetto.
-3. Usa la cartella radice del progetto come root.
-4. Vercel rileverà automaticamente un sito statico.
-5. La pagina iniziale è `presentazione.html`; l'editor del generatore è disponibile in `generatore.html`.
+## Pubblicità e privacy
 
-## Nota
-
-Il progetto è client-side e non usa database. Per il funzionamento base non richiede un server; la pubblicità Google e il caricamento dei font possono invece effettuare richieste verso servizi esterni.
+Il generatore contiene il flusso di consenso e i punti di integrazione per banner e video rewarded. Prima di attivare annunci reali, inserire gli ID Google, completare i dati del titolare in `privacy-policy.html` e verificare fornitori, consenso e download.
