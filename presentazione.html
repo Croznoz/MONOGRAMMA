@@ -972,6 +972,14 @@
             languageButtons.forEach(function (button) {
                 button.setAttribute('aria-pressed', button.dataset.language === language ? 'true' : 'false');
             });
+            var languageUrl = new URL(window.location.href);
+            languageUrl.searchParams.set('lang', language);
+            window.history.replaceState({}, '', languageUrl);
+            document.querySelectorAll('a[href*="generatore.html"]').forEach(function (link) {
+                var generatorUrl = new URL(link.href, window.location.href);
+                generatorUrl.searchParams.set('lang', language);
+                link.href = generatorUrl.href;
+            });
             try { localStorage.setItem('monogramma-language', language); } catch (error) { }
         }
 
@@ -981,8 +989,8 @@
             });
         });
 
-        var savedLanguage = 'it';
-        try { savedLanguage = localStorage.getItem('monogramma-language') || 'it'; } catch (error) { }
+        var savedLanguage = new URLSearchParams(window.location.search).get('lang');
+        try { if (!savedLanguage) savedLanguage = localStorage.getItem('monogramma-language') || 'it'; } catch (error) { }
         applyLanguage(savedLanguage === 'en' ? 'en' : 'it');
 
         if (origin && origin !== 'null') {

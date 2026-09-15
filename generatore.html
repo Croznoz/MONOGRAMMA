@@ -1081,6 +1081,9 @@
             document.querySelectorAll('[data-language]').forEach(function (button) {
                 button.setAttribute('aria-pressed', button.dataset.language === currentLanguage ? 'true' : 'false');
             });
+            var languageUrl = new URL(window.location.href);
+            languageUrl.searchParams.set('lang', currentLanguage);
+            window.history.replaceState({}, '', languageUrl);
             try { localStorage.setItem('monogramma-language', currentLanguage); } catch (error) { }
         }
 
@@ -1451,8 +1454,8 @@
         /* ═══════════════════════════════════════════
            INIT
            ═══════════════════════════════════════════ */
-          let savedLanguage = 'it';
-          try { savedLanguage = localStorage.getItem('monogramma-language') || 'it'; } catch (error) { }
+        let savedLanguage = new URLSearchParams(window.location.search).get('lang');
+        try { if (!savedLanguage) savedLanguage = localStorage.getItem('monogramma-language') || 'it'; } catch (error) { }
           applyEditorLanguage(savedLanguage);
         syncScaleControls();
         syncScaleControls();
